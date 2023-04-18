@@ -6,6 +6,10 @@ import com.parkit.parkingsystem.model.Ticket;
 public class FareCalculatorService {
 
     public void calculateFare(Ticket ticket){
+        calculateFare(ticket, false);
+    }
+
+    public void calculateFare(Ticket ticket, boolean discount){
         if( (ticket.getOutTime() == null) || (ticket.getOutTime().before(ticket.getInTime())) ){
             throw new IllegalArgumentException("Out time provided is incorrect:"+ticket.getOutTime().toString());
         }
@@ -22,7 +26,12 @@ public class FareCalculatorService {
                     ticket.setPrice(0);
                 }
                 else{
-                    ticket.setPrice(duration * Fare.CAR_RATE_PER_HOUR);
+                    if(discount){
+                        ticket.setPrice(0.95*duration * Fare.CAR_RATE_PER_HOUR);
+                    }
+                    else{
+                        ticket.setPrice(duration * Fare.CAR_RATE_PER_HOUR);
+                    }
                 }
                 break;
             }
@@ -31,7 +40,12 @@ public class FareCalculatorService {
                     ticket.setPrice(0);
                 }
                 else{
-                    ticket.setPrice(duration * Fare.BIKE_RATE_PER_HOUR);
+                    if(discount){
+                        ticket.setPrice(0.95*duration * Fare.BIKE_RATE_PER_HOUR);
+                    }
+                    else{
+                        ticket.setPrice(duration * Fare.BIKE_RATE_PER_HOUR);
+                    }
                 }
                 break;
             }
